@@ -1,0 +1,402 @@
+/* ...existing code... */
+:root{
+    --red:#d7261e;
+    --yellow:#ffd400;
+    --bg:#fff8e1;
+    --text:#2b2b2b;
+    --muted:#666;
+    --header-height: 72px;
+    --max-width:1200px;
+}
+
+/* Container centralizado e fluido */
+.container{
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 18px;
+}
+
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Inter, system-ui, Arial, sans-serif;
+    background:linear-gradient(180deg,var(--bg),#fff);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+}
+
+.site-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 16px;
+    background:linear-gradient(90deg,var(--yellow),#fff);
+    border-bottom:4px solid var(--red);
+    position:sticky;
+    top:0;
+    z-index:20;
+    align-items:center;
+    padding:12px 16px;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.brand h1{
+    margin:0;
+    color:var(--red);
+    letter-spacing:1px;
+    font-size:1.3rem;
+}
+.brand .tagline{font-size:0.9rem;color:var(--muted)}
+
+.menu-toggle{
+    display:none;
+    background:transparent;
+    border:0;
+    font-size:1.4rem;
+    font-size:1.2rem;
+    padding:6px;
+    border-radius:8px;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex:1 1 auto;
+    justify-content:flex-end;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+/* Menu toggle sempre disponível em telas estreitas */
+.menu-toggle{ font-size:1.2rem; padding:6px; border-radius:8px; }
+
+.search{
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid rgba(0,0,0,0.08);
+    min-width:160px;
+}
+
+.categories{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+.cat-btn{
+    background:transparent;
+    border:2px solid transparent;
+    padding:6px 10px;
+    border-radius:20px;
+    cursor:pointer;
+    color:var(--text);
+}
+.cat-btn.active{
+    background:var(--red);
+    color:#fff;
+    border-color:var(--red);
+}
+
+.cart-btn{
+    background:var(--red);
+    color:#fff;
+    border:0;
+    padding:8px 10px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+}
+.cart-count{
+    background:#fff;
+    color:var(--red);
+    border-radius:50%;
+    padding:2px 7px;
+    font-weight:700;
+}
+
+/* Grid de cards */
+.container{padding:20px;}
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+@media (max-width:1200px){ .menu-grid{ grid-template-columns: repeat(3,1fr); } }
+@media (max-width:900px){  .menu-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:640px){  .menu-grid{ grid-template-columns: 1fr; } }
+
+/* Card */
+.card{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+@media (max-width:900px){ .card img{ height:160px; } }
+@media (max-width:480px){ .card img{ height:140px; } }
+.card-body{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    flex:1;
+}
+.card-title{font-weight:700}
+.card-desc{font-size:0.9rem;color:var(--muted)}
+.price-row{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+}
+.btn{cursor:pointer;border:0;padding:8px 10px;border-radius:8px}
+.btn-primary{background:var(--red);color:#fff}
+.btn-secondary{background:#ffd; border:1px solid rgba(0,0,0,0.06)}
+.small{font-size:0.9rem}
+
+/* Carrinho modal */
+.cart-modal{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.4);
+    z-index:50;
+}
+.cart-modal[aria-hidden="false"]{display:flex}
+.cart-panel{
+    width:420px;
+    max-width:95%;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+}
+.cart-panel header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    background:var(--yellow);
+    border-bottom:2px solid var(--red);
+}
+.cart-items{max-height:320px;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.cart-item{display:flex;gap:8px;align-items:center;border-bottom:1px dashed #eee;padding-bottom:8px}
+.cart-item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+.cart-footer{display:flex;gap:8px;align-items:center;padding:12px;justify-content:space-between}
+@media (max-width:640px){
+  .cart-panel{ width:95%; margin:0 8px; }
+  .cart-items{ max-height:54vh; }
+}
+
+/* Responsivo */
+@media (max-width:1000px){
+    .menu-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:640px){
+    .menu-toggle{display:inline-block}
+    .categories{display:none}
+    .header-actions{gap:8px}
+    .search{display:none}
+    .menu-grid{grid-template-columns:1fr}
+}
+
+/* Checkout: layout fluido e empilhamento em mobile */
+/* se estiver usando o CSS inline do checkout.html, essas classes irão complementar */
+.checkout{
+  max-width:1200px;
+  margin:18px auto;
+  padding:8px;
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:18px;
+}
+@media (max-width:1000px){
+  .checkout{ grid-template-columns: 1fr 320px; }
+}
+@media (max-width:900px){
+  .checkout{ grid-template-columns: 1fr; }
+  .order-summary{ order:2; margin-top:12px; }
+  .card-form{ order:1; }
+}
+
+/* Form inputs e botão full width em mobile */
+.card-form input[type="text"],
+.card-form input[type="tel"],
+.card-form select,
+.card-form textarea{
+  width:100%;
+  box-sizing:border-box;
+}
+.btn-full{
+  display:inline-block;
+  width:100%;
+  padding:12px 14px;
+  font-size:1rem;
+  border-radius:10px;
+}
+
+/* Ajustes visuais menores */
+.brand .tagline{ display:none; } /* reduzido para telas pequenas, usar se quiser */
+@media (min-width:900px){ .brand .tagline{ display:inline-block; } }
+
+/* melhora contraste e espaçamento em telas pequenas */
+@media (max-width:480px){
+  body{ font-size:15px; }
+  .site-header{ padding:10px; }
+  .search{ min-width:unset; width:100%; order:2; }
+  .categories{ width:100%; order:3; display:flex; gap:6px; overflow:auto; }
+  .header-actions{ justify-content:space-between; }
+}
+
+/* Ajustes para layout de cardápio inspirado na imagem: cards maiores, imagens destacadas, preços em destaque */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 20px 0;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  border-color: var(--red);
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-bottom: 4px solid var(--yellow);
+}
+
+.card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--red);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--red);
+  background: var(--yellow);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #b81a12;
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+/* Responsivo: em mobile, cards empilhados e menores */
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .card img {
+    height: 180px;
+  }
+  .card-title {
+    font-size: 1.1rem;
+  }
+  .price {
+    font-size: 1.2rem;
+  }
+}
+
+/* Header mais "cardápio-like": fundo gradiente, logo maior */
+.site-header {
+  background: linear-gradient(135deg, var(--yellow) 0%, #fff 50%, var(--red) 100%);
+  padding: 16px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.brand h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--red);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Footer simples para "cardápio" */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
