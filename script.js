@@ -83,13 +83,58 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('tele_cart', JSON.stringify(cart));
   }
 
+  function flyToCart(imgEl){
+    if(!imgEl) return Promise.resolve();
+    return new Promise(resolve => {
+      const imgRect = imgEl.getBoundingClientRect();
+      const cartRect = cartBtn.getBoundingClientRect();
+      const clone = imgEl.cloneNode(true);
+      clone.classList.add('fly-img');
+      // set initial styles
+      clone.style.left = imgRect.left + 'px';
+      clone.style.top = imgRect.top + 'px';
+      clone.style.width = imgRect.width + 'px';
+      clone.style.height = imgRect.height + 'px';
+      clone.style.position = 'fixed';
+      document.body.appendChild(clone);
+      // force reflow
+      clone.getBoundingClientRect();
+      const destX = (cartRect.left + cartRect.width/2) - (imgRect.left + imgRect.width/2);
+      const destY = (cartRect.top + cartRect.height/2) - (imgRect.top + imgRect.height/2);
+      const scale = 0.2;
+      // trigger transition
+      requestAnimationFrame(() => {
+        clone.style.transform = `translate(${destX}px, ${destY}px) scale(${scale})`;
+        clone.style.opacity = '0.6';
+      });
+      const cleanup = () => {
+        if(clone && clone.parentNode) clone.parentNode.removeChild(clone);
+        // small bump animation on cart count
+        cartCount.classList.add('bump');
+        setTimeout(()=> cartCount.classList.remove('bump'), 420);
+        resolve();
+      };
+      clone.addEventListener('transitionend', cleanup, { once: true });
+      // fallback
+      setTimeout(cleanup, 800);
+    });
+  }
+
   function addToCart(id){
     const item = menu.find(m=>m.id===id);
     if(!item) return;
+    // find image element in the rendered DOM
+    const btnEl = menuGrid.querySelector(`.add-to-cart[data-id="${id}"]`);
+    const imgEl = btnEl ? btnEl.closest('.card').querySelector('img') : null;
+
+    // optimistically update cart data for responsiveness
     const exists = cart.find(c=>c.id===id);
     if(exists) exists.qty += 1;
     else cart.push({...item, qty:1});
     updateCartUI();
+
+    // run flying animation (non-blocking)
+    flyToCart(imgEl).catch(()=>{});
   }
 
   // eventos globais
