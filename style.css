@@ -39,19 +39,43 @@ body{
     padding:12px 16px;
     gap:10px;
     flex-wrap:wrap;
+    position: relative; /* necessário para posicionamento da marca central */
 }
 .brand{
     display:flex;
     align-items:center;
     gap:12px;
+    /* marca centralizada no header */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
 }
 .brand h1{
     margin:0;
     color:var(--red);
     letter-spacing:1px;
     font-size:1.3rem;
+    text-align:center;
 }
 .brand .tagline{font-size:0.9rem;color:var(--muted)}
+
+/* imagem circular da lancheria ao lado do título */
+.brand-img{
+    width:64px;
+    height:64px;
+    object-fit:cover;
+    border-radius:50%;
+    border:3px solid #fff;
+    box-shadow:0 6px 16px rgba(0,0,0,0.12);
+    flex-shrink:0;
+}
+
+/* mantém o controle do menu à esquerda (fora da marca central) */
+.left-toggle {
+  position: relative;
+  z-index: 35;
+}
 
 .menu-toggle{
     display:none;
@@ -262,6 +286,10 @@ body{
   .search{ min-width:unset; width:100%; order:2; }
   .categories{ width:100%; order:3; display:flex; gap:6px; overflow:auto; }
   .header-actions{ justify-content:space-between; }
+  /* adapta marca central para não cobrir ações à direita */
+  .brand { left: 50%; transform: translateX(-50%); gap:8px; }
+  .brand-img { width:48px; height:48px; }
+  .brand h1 { font-size:1.1rem; }
 }
 
 /* Ajustes para layout de cardápio inspirado na imagem: cards maiores, imagens destacadas, preços em destaque */
