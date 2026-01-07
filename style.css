@@ -24,93 +24,105 @@ body{
     -webkit-font-smoothing:antialiased;
 }
 
+/* ========== HEADER (modernizado e organizado) ========== */
+/* Usamos grid para garantir alinhamento consistente: esquerda (toggle),
+   centro (marca) e direita (ações). Mantive nomes e cores sem alterações. */
 .site-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding:14px 16px;
-    background:linear-gradient(90deg,var(--yellow),#fff);
-    border-bottom:4px solid var(--red);
-    position:sticky;
-    top:0;
-    z-index:20;
-    align-items:center;
-    padding:12px 16px;
-    gap:10px;
-    flex-wrap:wrap;
-    position: relative; /* necessário para posicionamento da marca central */
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--yellow) 0%, #fff 50%, var(--red) 100%);
+    border-bottom: 4px solid var(--red);
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    height: var(--header-height);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
+
+/* Esquerda: botão do menu (sempre visível em mobile) */
+.left-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 8px;
+  z-index: 65;
+}
+.menu-toggle{
+    background: rgba(255,255,255,0.08);
+    border: 0;
+    font-size: 1.2rem;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: var(--text);
+    backdrop-filter: blur(4px);
+    transition: background 180ms ease, transform 180ms ease;
+}
+.menu-toggle:active{ transform: scale(.98); }
+.menu-toggle:hover{ background: rgba(255,255,255,0.12); }
+
+/* Centro: marca - agora dentro do fluxo (não absolute) para evitar sobreposição */
 .brand{
     display:flex;
     align-items:center;
     gap:12px;
-    /* marca centralizada no header */
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 30;
+    justify-self: center;
+    width: min(640px, 100%);
+    padding: 6px 12px;
+    border-radius: 14px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    backdrop-filter: blur(4px);
+}
+.brand-img{
+    width:72px;
+    height:72px;
+    object-fit:cover;
+    border-radius:12px;
+    border:3px solid rgba(255,255,255,0.9);
+    box-shadow:0 8px 22px rgba(0,0,0,0.12);
+    flex-shrink:0;
 }
 .brand h1{
     margin:0;
     color:var(--red);
     letter-spacing:1px;
-    font-size:1.3rem;
-    text-align:center;
+    font-size:1.25rem;
+    text-align:left;
 }
 .brand .tagline{font-size:0.9rem;color:var(--muted)}
 
-/* imagem circular da lancheria ao lado do título */
-.brand-img{
-    width:64px;
-    height:64px;
-    object-fit:cover;
-    border-radius:50%;
-    border:3px solid #fff;
-    box-shadow:0 6px 16px rgba(0,0,0,0.12);
-    flex-shrink:0;
-}
-
-/* mantém o controle do menu à esquerda (fora da marca central) */
-.left-toggle {
-  position: relative;
-  z-index: 35;
-}
-
-.menu-toggle{
-    display:none;
-    background:transparent;
-    border:0;
-    font-size:1.4rem;
-    font-size:1.2rem;
-    padding:6px;
-    border-radius:8px;
-}
-
+/* Direita: ações (search, categorias, carrinho, admin) */
 .header-actions{
     display:flex;
     align-items:center;
     gap:10px;
-    flex:1 1 auto;
-    justify-content:flex-end;
-    gap:8px;
+    justify-self: end;
     flex-wrap:wrap;
 }
 
-/* Menu toggle sempre disponível em telas estreitas */
-.menu-toggle{ font-size:1.2rem; padding:6px; border-radius:8px; }
-
+/* Search modernizado: ícone implícito e estilo "pill" */
 .search{
-    padding:8px 10px;
-    border-radius:8px;
-    border:1px solid rgba(0,0,0,0.08);
-    min-width:160px;
+    padding:10px 12px 10px 36px;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,0.06);
+    min-width:220px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%232b2b2b" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 0a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: 10px center;
 }
 
+/* categorias como rolagem horizontal compacta com pills */
 .categories{
     display:flex;
-    gap:6px;
-    flex-wrap:wrap;
+    gap:8px;
+    flex-wrap:nowrap;
+    align-items:center;
+    overflow:auto;
+    padding:6px;
+    scrollbar-width: thin;
 }
 .cat-btn{
     background:transparent;
@@ -119,31 +131,55 @@ body{
     border-radius:20px;
     cursor:pointer;
     color:var(--text);
+    white-space:nowrap;
+    transition: transform 160ms ease, box-shadow 160ms ease;
 }
+.cat-btn:hover{ transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
 .cat-btn.active{
     background:var(--red);
     color:#fff;
     border-color:var(--red);
+    box-shadow: 0 8px 20px rgba(215,38,30,0.12);
 }
 
+/* Carrinho e contador mais legíveis */
 .cart-btn{
     background:var(--red);
     color:#fff;
     border:0;
-    padding:8px 10px;
-    border-radius:8px;
+    padding:8px 12px;
+    border-radius:10px;
     display:flex;
     align-items:center;
     gap:8px;
     cursor:pointer;
+    box-shadow: 0 8px 20px rgba(215,38,30,0.12);
 }
 .cart-count{
     background:#fff;
     color:var(--red);
     border-radius:50%;
-    padding:2px 7px;
-    font-weight:700;
+    padding:3px 8px;
+    font-weight:800;
+    min-width:28px;
+    text-align:center;
 }
+
+/* admin link estilizado */
+.admin-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px;
+    border-radius:8px;
+    color:var(--text);
+    text-decoration:none;
+    background: rgba(255,255,255,0.04);
+    transition: background 160ms ease, transform 160ms ease;
+}
+.admin-link:hover{ background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+/* ========== resto do CSS (mantive a maior parte original) ========== */
 
 /* Grid de cards */
 .container{padding:20px;}
@@ -282,13 +318,12 @@ body{
 /* melhora contraste e espaçamento em telas pequenas */
 @media (max-width:480px){
   body{ font-size:15px; }
-  .site-header{ padding:10px; }
-  .search{ min-width:unset; width:100%; order:2; }
+  .site-header{ padding:10px; grid-template-columns: auto 1fr auto; height:auto; gap:8px; }
+  .search{ min-width:unset; width:100%; order:2; display:block; }
   .categories{ width:100%; order:3; display:flex; gap:6px; overflow:auto; }
   .header-actions{ justify-content:space-between; }
-  /* adapta marca central para não cobrir ações à direita */
-  .brand { left: 50%; transform: translateX(-50%); gap:8px; }
-  .brand-img { width:48px; height:48px; }
+  .brand { gap:8px; }
+  .brand-img { width:48px; height:48px; border-radius:10px; }
   .brand h1 { font-size:1.1rem; }
 }
 
@@ -403,20 +438,6 @@ body{
   .price {
     font-size: 1.2rem;
   }
-}
-
-/* Header mais "cardápio-like": fundo gradiente, logo maior */
-.site-header {
-  background: linear-gradient(135deg, var(--yellow) 0%, #fff 50%, var(--red) 100%);
-  padding: 16px 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.brand h1 {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--red);
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 /* Footer simples para "cardápio" */
