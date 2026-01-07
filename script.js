@@ -1,4 +1,4 @@
-// ...existing code...
+// ...existing code... (header/drawer enhancements) ...
 document.addEventListener('DOMContentLoaded', () => {
   const menuGrid = document.getElementById('menuGrid');
   const categories = document.getElementById('categories');
@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // carrinho em localStorage
   let cart = JSON.parse(localStorage.getItem('tele_cart') || '[]');
 
+  // ---------- Render menu function (sem alterações) ----------
   function renderMenu(list) {
     menuGrid.innerHTML = '';
     list.forEach(item => {
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ---------- Cart UI (sem alterações importantes) ----------
   function updateCartUI(){
     cartCount.textContent = cart.reduce((s,i)=>s+i.qty,0);
     cartItemsEl.innerHTML = '';
@@ -83,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('tele_cart', JSON.stringify(cart));
   }
 
+  // ---------- Fly to cart animation (sem alterações) ----------
   function flyToCart(imgEl){
     if(!imgEl) return Promise.resolve();
     return new Promise(resolve => {
@@ -137,22 +140,132 @@ document.addEventListener('DOMContentLoaded', () => {
     flyToCart(imgEl).catch(()=>{});
   }
 
-  // eventos globais
+  // ---------- SIDE DRAWER CREATION & SYNC (novo) ----------
+  // create overlay and drawer elements dynamically so HTML doesn't need changes
+  const drawerOverlay = document.createElement('div');
+  drawerOverlay.className = 'drawer-overlay';
+  drawerOverlay.setAttribute('aria-hidden', 'true');
+
+  const sideDrawer = document.createElement('aside');
+  sideDrawer.className = 'side-drawer';
+  sideDrawer.id = 'sideDrawer';
+  sideDrawer.setAttribute('aria-hidden','true');
+
+  // header inside drawer
+  const drawerHead = document.createElement('div');
+  drawerHead.className = 'drawer-head';
+  drawerHead.innerHTML = `<div class="drawer-title">Categorias</div><button id="closeDrawer" aria-label="Fechar menu">✕</button>`;
+  sideDrawer.appendChild(drawerHead);
+
+  // container for options
+  const drawerList = document.createElement('div');
+  drawerList.className = 'drawer-list';
+  sideDrawer.appendChild(drawerList);
+
+  document.body.appendChild(drawerOverlay);
+  document.body.appendChild(sideDrawer);
+
+  // clone header categories into drawer (keeps original in header)
+  function populateDrawerFromHeader(){
+    drawerList.innerHTML = '';
+    const headerButtons = Array.from(categories.querySelectorAll('.cat-btn'));
+    headerButtons.forEach(btn => {
+      const clone = btn.cloneNode(true);
+      clone.classList.add('drawer-item');
+      // ensure dataset is preserved
+      clone.dataset.cat = btn.dataset.cat;
+      // clicking drawer item should behave same as header
+      clone.addEventListener('click', (e) => {
+        const cat = clone.dataset.cat;
+        selectCategory(cat, 'drawer');
+        closeDrawer();
+      });
+      drawerList.appendChild(clone);
+    });
+  }
+  populateDrawerFromHeader();
+
+  // open/close helpers
+  function openDrawer(){
+    sideDrawer.setAttribute('aria-hidden','false');
+    drawerOverlay.setAttribute('aria-hidden','false');
+    menuToggle.setAttribute('aria-expanded','true');
+    // sync active state initial
+    syncActiveButtons();
+  }
+  function closeDrawer(){
+    sideDrawer.setAttribute('aria-hidden','true');
+    drawerOverlay.setAttribute('aria-hidden','true');
+    menuToggle.setAttribute('aria-expanded','false');
+  }
+  function toggleDrawer(){
+    const isOpen = sideDrawer.getAttribute('aria-hidden') === 'false';
+    if(isOpen) closeDrawer(); else openDrawer();
+  }
+
+  // sync active class between header and drawer
+  function syncActiveButtons(){
+    const activeCat = categories.querySelector('.cat-btn.active')?.dataset.cat || 'all';
+    // header
+    categories.querySelectorAll('.cat-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === activeCat);
+    });
+    // drawer
+    sideDrawer.querySelectorAll('.cat-btn, .drawer-item').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === activeCat);
+    });
+  }
+
+  // function to select a category from any source
+  function selectCategory(cat, source){
+    // update header active classes
+    categories.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+    // update drawer active classes
+    sideDrawer.querySelectorAll('.cat-btn, .drawer-item').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+    const filtered = cat === 'all' ? menu : menu.filter(it => it.cat === cat);
+    renderMenu(filtered);
+  }
+
+  // handle clicks on header categories (existing UI)
+  categories.addEventListener('click', (e) => {
+    const btn = e.target.closest('.cat-btn');
+    if(!btn) return;
+    selectCategory(btn.dataset.cat, 'header');
+    // if drawer is open (on small devices), close it
+    if(sideDrawer.getAttribute('aria-hidden') === 'false') closeDrawer();
+  });
+
+  // ensure close button inside drawer works
+  document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+  // overlay click closes drawer
+  drawerOverlay.addEventListener('click', closeDrawer);
+
+  // keyboard: Esc closes drawer
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      if(sideDrawer.getAttribute('aria-hidden') === 'false') closeDrawer();
+      if(cartModal.getAttribute('aria-hidden') === 'false') cartModal.setAttribute('aria-hidden','true');
+    }
+  });
+
+  // menu toggle now controls the left drawer
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleDrawer();
+  });
+
+  // keep header categories and drawer in sync on resize (re-populate if header changes)
+  window.addEventListener('resize', () => {
+    populateDrawerFromHeader();
+    syncActiveButtons();
+  });
+
+  // ---------- Eventos globais (mantive e integrei) ----------
   menuGrid.addEventListener('click', (e) => {
     const btn = e.target.closest('.add-to-cart');
     if(btn){
       addToCart(btn.dataset.id);
     }
-  });
-
-  categories.addEventListener('click', (e) => {
-    const btn = e.target.closest('.cat-btn');
-    if(!btn) return;
-    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const cat = btn.dataset.cat;
-    const filtered = cat === 'all' ? menu : menu.filter(it=>it.cat === cat);
-    renderMenu(filtered);
   });
 
   search.addEventListener('input', (e) => {
@@ -201,15 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'checkout.html';
   });
 
-  // mobile menu toggle: mostra/oculta categorias
-  menuToggle.addEventListener('click', () => {
-    const cat = document.querySelector('.categories');
-    if(!cat) return;
-    if(getComputedStyle(cat).display === 'none') cat.style.display = 'flex';
-    else cat.style.display = 'none';
-  });
+  // mobile menu toggle earlier logic removed in favor of drawer
 
   // inicializa
   renderMenu(menu);
   updateCartUI();
+  // ensure drawer is initially synced
+  syncActiveButtons();
 });
