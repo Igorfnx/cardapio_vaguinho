@@ -1,61 +1,65 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tele Lanches - Cardápio</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tele Lanches - Cardápio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- CABEÇALHO -->
-    <header class="site-header">
-        <div class="brand">
-            <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">☰</button>
-            <h1>TELE LANCHES</h1>
-        </div>
-
-        <div class="header-actions">
-            <input id="search" class="search" type="search" placeholder="Pesquisar...">
-            <nav class="categories" id="categories">
-                <button class="cat-btn active" data-cat="all">Todos</button>
-                <button class="cat-btn" data-cat="hamburguer">Hambúrguer</button>
-                <button class="cat-btn" data-cat="combo">Combo</button>
-                <button class="cat-btn" data-cat="bebida">Bebidas</button>
-                <button class="cat-btn" data-cat="extra">Extras</button>
-            </nav>
-            <button id="cartBtn" class="cart-btn" aria-label="Abrir carrinho">
-                🛒 <span id="cartCount" class="cart-count">0</span>
-            </button>
-            <a href="adimin.html" class="admin-link" title="Painel Admin">⚙️</a>
-        </div>
-    </header>
-
-    <main class="container">
-        <section id="menuGrid" class="menu-grid">
-            <!-- cards gerados via script.js -->
-        </section>
-    </main>
-
-    <!-- Modal Carrinho -->
-    <div id="cartModal" class="cart-modal" aria-hidden="true">
-        <div class="cart-panel">
-            <header>
-                <h2>Carrinho</h2>
-                <button id="closeCart" aria-label="Fechar">✕</button>
-            </header>
-            <div id="cartItems" class="cart-items"></div>
-            <footer class="cart-footer">
-                <div class="total">Total: R$ <span id="cartTotal">0.00</span></div>
-                <button id="clearCart" class="btn btn-secondary">Limpar</button>
-                <button id="checkout" class="btn btn-primary">Finalizar</button>
-            </footer>
-        </div>
+  <!-- CABEÇALHO -->
+  <header class="site-header">
+    <div class="brand">
+      <button id="menuToggle" class="menu-toggle" aria-label="Abrir menu">☰</button>
+      <h1>TELE LANCHES</h1>
     </div>
 
-    <footer>
-      <p>© 2025 Tele Lanches - Todos os direitos reservados. Pedidos via WhatsApp.</p>
-    </footer>
+    <div class="header-actions">
+      <input id="search" class="search" type="search" placeholder="Pesquisar..." />
+      <nav class="categories" id="categories" aria-label="Categorias">
+        <button class="cat-btn active" data-cat="all">Todos</button>
+        <button class="cat-btn" data-cat="hamburguer">Hambúrguer</button>
+        <button class="cat-btn" data-cat="combo">Combo</button>
+        <button class="cat-btn" data-cat="bebida">Bebidas</button>
+        <button class="cat-btn" data-cat="extra">Extras</button>
+      </nav>
 
-    <script src="script.js"></script>
+      <button id="cartBtn" class="cart-btn" aria-label="Abrir carrinho">
+        🛒 <span id="cartCount" class="cart-count">0</span>
+      </button>
+
+      <a href="adimin.html" class="admin-link" title="Painel Admin">⚙️</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="menuGrid" class="menu-grid" aria-live="polite">
+      <!-- cards gerados via script.js -->
+    </section>
+  </main>
+
+  <!-- Modal Carrinho -->
+  <div id="cartModal" class="cart-modal" aria-hidden="true">
+    <div class="cart-panel" role="dialog" aria-label="Carrinho de compras">
+      <header>
+        <h2>Carrinho</h2>
+        <button id="closeCart" aria-label="Fechar">✕</button>
+      </header>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <footer class="cart-footer">
+        <div class="total">Total: R$ <span id="cartTotal">0.00</span></div>
+        <button id="clearCart" class="btn btn-secondary">Limpar</button>
+        <button id="checkout" class="btn btn-primary">Finalizar</button>
+      </footer>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Tele Lanches - Todos os direitos reservados. Pedidos via WhatsApp.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
