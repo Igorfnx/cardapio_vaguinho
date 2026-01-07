@@ -1,4 +1,4 @@
-/* ...existing code... (updated header + side drawer) */
+/* ...existing code... (header + drawer) */
 :root{
     --red:#d7261e;
     --bg:#fff8e1;
@@ -25,12 +25,11 @@ body{
     -webkit-font-smoothing:antialiased;
 }
 
-/* ========== HEADER (modernizado e organizado) ========== */
-/* Usamos grid para garantir alinhamento consistente: esquerda (toggle),
-   centro (marca) e direita (ações). Mantive nomes e cores sem alterações. */
+/* ========== HEADER (organizado: toggle + brand à esquerda, ações à direita) ========== */
+/* Grid com três colunas: toggle | marca | ações (esta última ocupa o resto) */
 .site-header{
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto auto 1fr;
     align-items: center;
     gap: 12px;
     padding: 14px 20px;
@@ -64,34 +63,25 @@ body{
 .menu-toggle:active{ transform: scale(.98); }
 .menu-toggle:hover{ background: rgba(255,255,255,0.12); }
 
-/* Centro: marca - agora dentro do fluxo (não absolute) para evitar sobreposição */
+/* Marca (apenas nome) à esquerda, alinhada ao toggle */
 .brand{
     display:flex;
     align-items:center;
-    gap:12px;
-    justify-self: center;
-    width: min(640px, 100%);
-    padding: 6px 12px;
-    border-radius: 14px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-    backdrop-filter: blur(4px);
-}
-.brand-img{
-    width:72px;
-    height:72px;
-    object-fit:cover;
-    border-radius:12px;
-    border:3px solid rgba(255,255,255,0.9);
-    box-shadow:0 8px 22px rgba(0,0,0,0.12);
-    flex-shrink:0;
+    gap:8px;
+    justify-self: start;
+    padding: 6px 8px;
+    border-radius: 10px;
+    background: transparent; /* mantendo clean e alinhado à esquerda */
 }
 .brand h1{
     margin:0;
     color:var(--red);
     letter-spacing:1px;
     font-size:1.25rem;
+    font-weight:900;
     text-align:left;
+    text-transform: none;
+    line-height:1;
 }
 .brand .tagline{font-size:0.9rem;color:var(--muted)}
 
@@ -404,7 +394,6 @@ body{
   .categories{ width:100%; order:3; display:flex; gap:6px; overflow:auto; }
   .header-actions{ justify-content:space-between; }
   .brand { gap:8px; }
-  .brand-img { width:48px; height:48px; border-radius:10px; }
   .brand h1 { font-size:1.1rem; }
 }
 
